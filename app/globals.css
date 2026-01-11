@@ -349,6 +349,17 @@ p {
   line-height: 1.8;
 }
 
+.partnership-details {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--border-color);
+}
+
+.partnership-details p {
+  margin-bottom: 0.75rem;
+  font-size: 1.05rem;
+}
+
 .sponsors-content {
   text-align: center;
 }

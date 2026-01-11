@@ -160,11 +160,18 @@ export default async function HomePage() {
               <h3>SHFMU Ismail Qemali, Prishtinë</h3>
               <p>
                 Ky projekt është organizuar nga SHFMU Ismail Qemali në Prishtinë, 
-                me qëllim të promovimit të robotikës dhe teknologjisë në arsim.
+                me qëllim të promovimit të robotikës dhe teknologjisë në arsim. 
+                Projekti synon të nxisë interesimin e nxënësve për robotikë, programim 
+                dhe teknologji inovative.
               </p>
-              <p>
-                <strong>Organizues:</strong> Jehona Thaqi
-              </p>
+              <div className="partnership-details">
+                <p>
+                  <strong>Kryetare e Robotikës në Shkollën Tonë:</strong> Jehona Thaqi
+                </p>
+                <p>
+                  <strong>Organizues:</strong> Kosova Makers League (KML)
+                </p>
+              </div>
             </div>
           </div>
         </div>
