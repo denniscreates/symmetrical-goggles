@@ -3,7 +3,10 @@ import { getUpdates, getImagesByUpdateId, getParticipants, getProgrammingLanguag
 import Link from 'next/link'
 import ImageDisplay from '@/components/ImageDisplay'
 
-const partnershipLogoUrl = 'https://image2url.com/r2/bucket2/images/1768007938579-1c3c75bd-4c18-46ad-8c2c-06a2abffbd27.png'
+// Force dynamic rendering to prevent caching
+export const revalidate = 0
+export const dynamic = 'force-dynamic'
+
 const sponsorsImageUrl = 'https://image2url.com/r2/bucket2/images/1768009076939-8a95bd60-9358-44a2-8e86-adfb30ac9abf.png'
 
 export default async function HomePage() {
@@ -14,8 +17,9 @@ export default async function HomePage() {
   let updatesWithImages: Array<{ id: string; title: string; content: string; created_at: string; images: Array<{ id: string; image_url: string; alt_text: string | null }> }> = []
 
   try {
-    const updatesResult = await getUpdates(5)
+    const updatesResult = await getUpdates(10) // Increased limit to show more posts
     updates = Array.isArray(updatesResult) ? updatesResult : []
+    console.log(`Fetched ${updates.length} published updates`)
   } catch (error) {
     console.error('Error fetching updates:', error)
     updates = []
@@ -51,11 +55,13 @@ export default async function HomePage() {
                 title: update.title || '',
                 content: update.content || '',
                 created_at: update.created_at || new Date().toISOString(),
-                images: Array.isArray(images) ? images.map((img) => ({
-                  id: img.id || '',
-                  image_url: img.image_url || '',
-                  alt_text: img.alt_text || null,
-                })) : [],
+                images: Array.isArray(images) ? images
+                  .filter((img) => img && (img.image_url || img.file_path)) // Filter out images without URLs
+                  .map((img) => ({
+                    id: img.id || '',
+                    image_url: img.image_url || img.file_path || '', // Use file_path as fallback
+                    alt_text: img.alt_text || null,
+                  })) : [],
               }
             } catch (error) {
               console.error(`Error fetching images for update ${update.id}:`, error)
@@ -150,15 +156,6 @@ export default async function HomePage() {
         <div className="container">
           <h2 className="section-title">Partneritet Organizues</h2>
           <div className="partnership-content">
-            <div className="partnership-logo">
-              <Image
-                src={partnershipLogoUrl}
-                alt="Partneritet Organizues - Kosova Makers League"
-                width={300}
-                height={250}
-                className="partnership-image"
-              />
-            </div>
             <div className="partnership-info">
               <h3>SHFMU Ismail Qemali, Prishtinë</h3>
               <p>

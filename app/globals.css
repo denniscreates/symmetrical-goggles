@@ -452,7 +452,17 @@ p {
   }
 
   .logo {
+    max-height: 80px;
+    max-width: 150px;
+  }
+
+  .kosova-makers-logo {
     max-height: 100px;
+    max-width: 200px;
+  }
+
+  .logo-link {
+    gap: 1rem;
   }
 
   .footer-container {
@@ -544,14 +554,36 @@ p {
 .logo-link {
   display: flex;
   align-items: center;
+  gap: 2rem;
   text-decoration: none;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .logo {
   height: auto;
-  max-height: 160px;
+  max-height: 120px;
   width: auto;
+  max-width: 250px;
   object-fit: contain;
+}
+
+.school-logo {
+  transition: transform 0.3s ease;
+}
+
+.school-logo:hover {
+  transform: scale(1.05);
+}
+
+.kosova-makers-logo {
+  max-height: 160px;
+  max-width: 400px;
+  transition: transform 0.3s ease;
+}
+
+.kosova-makers-logo:hover {
+  transform: scale(1.05);
 }
 
 .nav {

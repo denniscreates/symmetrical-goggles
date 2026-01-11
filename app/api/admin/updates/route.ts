@@ -63,6 +63,7 @@ export async function POST(request: NextRequest) {
     })
 
     console.log('Update created:', update)
+    console.log('Published status:', published ?? true)
 
     if (!update) {
       console.error('Failed to create update - createUpdate returned null')
@@ -74,13 +75,16 @@ export async function POST(request: NextRequest) {
 
     // Add images if provided
     if (images && Array.isArray(images)) {
+      console.log(`Processing ${images.length} images for update ${update.id}`)
       for (let i = 0; i < images.length; i++) {
         const imageData = images[i]
-        const imageUrl = typeof imageData === 'string' ? imageData : imageData.url
+        const imageUrl = typeof imageData === 'string' ? imageData : (imageData.url || imageData.image_url)
         if (imageUrl && imageUrl.trim()) {
           // Handle both old format (string) and new format (object)
           const isMain = typeof imageData === 'object' ? imageData.isMain : i === 0
           const position = typeof imageData === 'object' ? imageData.position : (i === 0 ? 'top' : 'none')
+          
+          console.log(`Creating image ${i + 1}:`, { url: imageUrl, isMain, position })
           
           const imageResult = await createImage({
             update_id: update.id,
@@ -91,9 +95,18 @@ export async function POST(request: NextRequest) {
             is_main: isMain,
             position: position,
           })
-          console.log('Image created:', imageResult)
+          
+          if (imageResult) {
+            console.log(`Image ${i + 1} created successfully:`, imageResult.id)
+          } else {
+            console.error(`Failed to create image ${i + 1}`)
+          }
+        } else {
+          console.warn(`Image ${i + 1} skipped - no URL provided:`, imageData)
         }
       }
+    } else {
+      console.log('No images provided for this update')
     }
 
     return NextResponse.json(update)

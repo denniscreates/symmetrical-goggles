@@ -201,16 +201,25 @@ export async function getImagesByUpdateId(updateId: string): Promise<Image[]> {
   try {
     const { data, error } = await supabase
       .from('images')
-      .select('*')
+      .select('id, update_id, image_url, file_path, alt_text, display_order, is_main, position, created_at')
       .eq('update_id', updateId)
       .order('display_order', { ascending: true })
 
     if (error) {
       console.error('Error fetching images:', error)
+      console.error('Error details:', error.message, error.code)
       return []
     }
     if (!data) return []
-    return data as Image[]
+    
+    // Ensure image_url is set (use file_path as fallback)
+    const images = data.map((img: any) => ({
+      ...img,
+      image_url: img.image_url || img.file_path || '',
+    })) as Image[]
+    
+    console.log(`Fetched ${images.length} images for update ${updateId}`)
+    return images
   } catch (error) {
     console.error('Exception fetching images:', error)
     return []
