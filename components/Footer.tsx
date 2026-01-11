@@ -8,6 +8,10 @@ export default function Footer() {
         </div>
         <div className="footer-section">
           <h4>Organizues</h4>
+          <p>Kosova Makers League (KML)</p>
+        </div>
+        <div className="footer-section">
+          <h4>Kryetare e Robotikës</h4>
           <p>Jehona Thaqi</p>
         </div>
       </div>
